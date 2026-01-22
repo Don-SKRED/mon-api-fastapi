@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+import pytz
 from fastapi import FastAPI, Depends
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
@@ -7,8 +9,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # --- CONFIGURATION DB ---
-# NE COLLE PAS TON LIEN NEON ICI ! 
-# On utilise os.getenv pour que Render le trouve tout seul plus tard.
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
 
 if DATABASE_URL.startswith("postgres://"):
@@ -23,6 +23,8 @@ class Message(Base):
     __tablename__ = "messages"
     id = Column(Integer, primary_key=True, index=True)
     content = Column(String)
+    # Génère l'heure de Paris automatiquement
+    timestamp = Column(String, default=lambda: datetime.now(pytz.timezone('Europe/Paris')).strftime("%d/%m %H:%M"))
 
 Base.metadata.create_all(bind=engine)
 
@@ -32,7 +34,6 @@ class MessageCreate(BaseModel):
 # --- APP ---
 app = FastAPI()
 
-# Autorise ton futur site Netlify à parler à ce backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
