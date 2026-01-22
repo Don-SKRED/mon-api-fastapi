@@ -1,0 +1,19 @@
+# Environnement virtuel (très lourd, inutile sur GitHub)
+venv/
+.venv/
+env/
+
+# Fichiers de cache Python
+__pycache__/
+*.pyc
+
+# Base de données locale pour les tests
+*.db
+*.sqlite3
+
+# Fichiers de configuration système
+.DS_Store
+Thumbs.db
+
+# Variables d'environnement (si tu utilises un fichier .env)
+.env
